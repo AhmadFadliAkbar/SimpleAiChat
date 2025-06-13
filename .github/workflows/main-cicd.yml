@@ -38,7 +38,7 @@ jobs:
         env:
           CI: true
 
-    build-continous-inspection:
+  build-continous-inspection:
     name: 🔍 Analisis Kode (Continuous Inspection)
     steps:
       - name: ☕ Setup JDK 17 untuk SonarQube
