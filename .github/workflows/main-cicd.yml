@@ -2,34 +2,90 @@ name: Simple AIChat CI/CD Pipeline
 
 on:
   push:
-    branches: 
+    branches:
       - main
-      - develop 
+      - develop
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  integrate-test-inspect:
-    name: ⚙ Integrasi, Tes & Inspeksi
+  integrate-build-inspect:
+    name: ⚙ Integrate, Build & Inspect
     runs-on: ubuntu-latest
     steps:
-      - name: ⬇ Checkout Kode (Continuous Integration)
+      - name: ⬇ Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Diperlukan untuk analisis SonarQube
 
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Versi Node.js untuk Next.js terbaru
+          node-version: '20'
+          cache: 'npm' # Cache node_modules for faster builds
 
-      - name: 📦 Install Dependensi
+      - name: 📦 Install Dependencies
         run: npm ci
 
-      - name: 🔨 Build Aplikasi Next.js
+      - name: 🔨 Build Next.js Application
         run: npm run build
 
-      - name: 🧪 Jalankan Integration Tests
+      # Optional: Add linting or other inspections if needed
+      # - name: 🔍 Run Linter
+      #   run: npm run lint
+
+  continuous-testing:
+    name: 🧪 Run Continuous Tests
+    runs-on: ubuntu-latest
+    needs: integrate-build-inspect
+    steps:
+      - name: ⬇ Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm' # Cache node_modules for faster builds
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🔨 Build Next.js Application
+        run: npm run build
+
+      - name: 🧪 Run Integration Tests
         run: npm run test:integration
         env:
           CI: true
+
+  # continuous-inspection:
+  #   name: 🔍 Continuous Code Inspection
+  #   runs-on: ubuntu-latest
+  #   needs: integrate-build-inspect
+  #   steps:
+  #     - name: ☕ Setup JDK 17 untuk SonarQube
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         distribution: 'temurin'
+  #         java-version: '17'
+
+  #     - name: 📦 Cache paket SonarQube
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ~/.sonar/cache
+  #         key: ${{ runner.os }}-sonar
+  #         restore-keys: ${{ runner.os }}-sonar
+
+  #     - name: 🧐 Analisis SonarCloud (Continuous Inspection)
+  #       uses: SonarSource/sonarcloud-github-action@master
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #       with:
+  #         projectBaseDir: .
+  #         args: >
+  #           -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+  #           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+  #           -Dsonar.sources=.
+  #           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+  #           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
