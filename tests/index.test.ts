@@ -48,7 +48,7 @@ describe('getAIResponse Integration Test', () => {
     mockGenerateContent.mockRejectedValue(mockError);
 
     // Act & Assert: Expect the function to throw
-    const message = 'Hello, AIII!';
+    const message = 'Hello, AI!';
     await expect(getAIResponse(message)).rejects.toThrow('API request failed');
     expect(mockGenerateContent).toHaveBeenCalledWith({
       model: 'gemini-2.0-flash',
