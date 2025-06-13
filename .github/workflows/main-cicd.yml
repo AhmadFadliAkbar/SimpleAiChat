@@ -9,7 +9,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-integrate-test:
+  integrate-test-inspect:
     name: ⚙ Integrasi, Tes & Inspeksi
     runs-on: ubuntu-latest
     steps:
@@ -28,19 +28,17 @@ jobs:
 
       - name: 🔨 Build Aplikasi Next.js
         run: npm run build
-
-    build-continous-test:
-      - name: 🧪 Jalankan Continous Tests
+  
+  build-continous-testing:
+    name: 🔍 Analisis Kode (Continuous Testing)
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧪 Jalankan Integration Tests
         run: npm run test:integration
         env:
           CI: true
-          
+
     build-continous-inspection:
-      - name: 🧪 Jalankan Continous Tests
-        run: npm run test:integration
-        env:
-          CI: true
-
     name: 🔍 Analisis Kode (Continuous Inspection)
     steps:
       - name: ☕ Setup JDK 17 untuk SonarQube
