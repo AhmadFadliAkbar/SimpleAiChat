@@ -9,7 +9,7 @@ on:
     branches: [ main ]
 
 jobs:
-  integrate-test-inspect:
+  build-integrate-test:
     name: ⚙ Integrasi, Tes & Inspeksi
     runs-on: ubuntu-latest
     steps:
@@ -29,7 +29,43 @@ jobs:
       - name: 🔨 Build Aplikasi Next.js
         run: npm run build
 
-      - name: 🧪 Jalankan Integration Tests
+    build-continous-test:
+      - name: 🧪 Jalankan Continous Tests
         run: npm run test:integration
         env:
           CI: true
+          
+    build-continous-inspection:
+      - name: 🧪 Jalankan Continous Tests
+        run: npm run test:integration
+        env:
+          CI: true
+
+    name: 🔍 Analisis Kode (Continuous Inspection)
+    steps:
+      - name: ☕ Setup JDK 17 untuk SonarQube
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 📦 Cache paket SonarQube
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: 🧐 Analisis SonarCloud (Continuous Inspection)
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.sources=.
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
