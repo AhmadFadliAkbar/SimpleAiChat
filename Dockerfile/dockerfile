@@ -1,26 +1,23 @@
-# Gunakan base image Nginx yang ringan
+# Use the official Vercel image for Next.js
+FROM vercel/next
 
-FROM nginx:alpine
+# Set the working directory
+WORKDIR /app
 
+# Copy package.json and package-lock.json (or yarn.lock)
+COPY package.json package-lock.json* ./
 
-# Salin file HTML, CSS, dan JavaScript ke direktori default Nginx
+# Install dependencies
+RUN npm install
 
-COPY index.html /usr/share/nginx/html/
+# Copy the rest of the application code
+COPY . .
 
-COPY style.css /usr/share/nginx/html/
+# Build the Next.js application
+RUN npm run build
 
-COPY script.js /usr/share/nginx/html/
+# Expose the port the app runs on
+EXPOSE 3000
 
-# Jika ada direktori 'tests' yang ingin ikut disajikan (opsional)
-
-# COPY tests/ /usr/share/nginx/html/tests/
-
-
-# Expose port 80
-
-EXPOSE 80
-
-
-# Perintah default untuk menjalankan Nginx
-
-CMD ["nginx", "-g", "daemon off;"]  
+# Start the application
+CMD ["npm", "start"]
