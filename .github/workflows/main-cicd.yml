@@ -142,6 +142,7 @@ jobs:
             ls -la
             exit 1
           else
+            echo "out directory found, contents:"
             ls -la ./out
           fi
 
@@ -152,7 +153,8 @@ jobs:
           git checkout -b gh-pages
           git add .
           git commit -m "Initial gh-pages commit" || echo "No changes to commit"
-          git push origin gh-pages
+          git push origin gh-pages --force || echo "Push failed, checking error:"
+          git status
 
       - name: 🌍 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
