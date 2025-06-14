@@ -129,7 +129,7 @@ jobs:
         run: npm ci
 
       - name: 🔨 Build Aplikasi Next.js untuk Static Export
-        run: npm run export
+        run: npm run build
 
       - name: 🌍 Deploy ke GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Ganti kembali ke 'standalone' untuk kebutuhan Docker
   output: 'standalone',
-  // Opsi konfigurasi lain bisa ditambahkan di sini jika perlu
 };
- 
 
 export default nextConfig;
