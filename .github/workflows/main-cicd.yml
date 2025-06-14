@@ -131,11 +131,11 @@ jobs:
         run: npm ci
 
       - name: 🔨 Build Next.js Application (Static Export)
-        run: npm run build
+        run: npm run build:static
         env:
           NEXT_OUTPUT: export
 
-      - name: 🕵️ Debug Verify Build Output
+      - name: 🕵️ Debug: Verify Build Output
         run: |
           if [ ! -d "./out" ]; then
             echo "Error: out directory not found after build!"
@@ -144,6 +144,7 @@ jobs:
           else
             echo "out directory found, contents:"
             ls -la ./out
+            ls -la ./out/_next
           fi
 
       - name: 🌱 Initialize and Push gh-pages Branch
