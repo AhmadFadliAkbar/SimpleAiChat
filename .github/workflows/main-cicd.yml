@@ -131,7 +131,7 @@ jobs:
         run: npm ci
 
       - name: 🔨 Build Next.js Application (Static Export)
-        run: npm run build:static
+        run: npm run build
         env:
           NEXT_OUTPUT: export
 
