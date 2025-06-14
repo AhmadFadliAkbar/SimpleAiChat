@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
-  // Opsi konfigurasi lain bisa ditambahkan di sini jika perlu
+  // Ubah dari 'standalone' menjadi 'export'
+  output: 'export',
 };
- 
 
 export default nextConfig;
