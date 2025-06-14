@@ -112,7 +112,6 @@ jobs:
   deploy-to-github-pages:
     name: 🌍 Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
       contents: write
     steps:
@@ -129,9 +128,19 @@ jobs:
         run: npm ci
 
       - name: 🔨 Build Next.js Application (Static Export)
-        run: npm run build
+        run: npm run build:static
         env:
           NEXT_OUTPUT: export
+
+      - name: 🕵️ Debug: Verify Build Output
+        run: |
+          if [ ! -d "./out" ]; then
+            echo "Error: out directory not found after build!"
+            ls -la
+            exit 1
+          else
+            ls -la ./out
+          fi
 
       - name: 🌍 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
