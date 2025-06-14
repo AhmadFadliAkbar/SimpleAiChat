@@ -135,7 +135,7 @@ jobs:
         env:
           NEXT_OUTPUT: export
 
-      - name: 🕵️ Debug: Verify Build Output
+      - name: 🕵️ Debug Verify Build Output
         run: |
           if [ ! -d "./out" ]; then
             echo "Error: out directory not found after build!"
