@@ -137,11 +137,6 @@ jobs:
         run: mkdir -p out
       - name: 📂 Salin Hasil Export ke Direktori GitHub Pages
         run: cp -r ./out/* out/
-      - name: 📂 Tambahkan File .nojekyll untuk Menghindari Masalah Jekyll
-        run: echo > out/.nojekyll
-      - name: 📂 Tambahkan File CNAME untuk Custom Domain (Jika Ada
-        if: secrets.CUSTOM_DOMAIN != ''
-        run: echo ${{ secrets.CUSTOM_DOMAIN }} > out/CNAME)
 
       - name: 🌍 Deploy ke GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
