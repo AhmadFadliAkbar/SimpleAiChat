@@ -132,12 +132,9 @@ jobs:
       - name: 🔨 Build Next.js Application
         run: npm run build
 
-      - name: 📦 Export Next.js Application to Static HTML
-        run: npm run export # Assumes `export` script runs `next export`
-
       - name: 🌍 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4 # Use latest version
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./out # Directory containing static files
-          publish_branch: gh-pages # Default branch for GitHub Pages
+          publish_branch: main # Default branch for GitHub Pages
