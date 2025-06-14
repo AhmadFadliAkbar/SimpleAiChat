@@ -117,31 +117,27 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: ⬇ Checkout Kode
+      - name: ⬇ Checkout Code
         uses: actions/checkout@v4
 
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '20.x' # Use LTS version for stability
+          cache: 'npm' # Cache node_modules for faster runs
 
-      - name: 📦 Install Dependensi
+      - name: 📦 Install Dependencies
         run: npm ci
 
-      - name: 🔨 Build Aplikasi Next.js untuk Static Export
+      - name: 🔨 Build Next.js Application
         run: npm run build
 
-      - name: 📦 Export Next.js Aplikasi ke Static HTML
-        run: npm run deploy
-      - name: 📂 Siapkan Direktori untuk GitHub Page s
-        run: mkdir -p out
-      - name: 📂 Salin Hasil Export ke Direktori GitHub Pages
-        run: cp -r ./out/* out/
+      - name: 📦 Export Next.js Application to Static HTML
+        run: npm run export # Assumes `export` script runs `next export`
 
-      - name: 🌍 Deploy ke GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: 🌍 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4 # Use latest version
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out # Direktori untuk Next.js static export
-
-        
+          publish_dir: ./out # Directory containing static files
+          publish_branch: gh-pages # Default branch for GitHub Pages
